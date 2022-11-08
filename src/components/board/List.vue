@@ -1,16 +1,14 @@
 <template>
     <div>
         <h2>게시판 리스트</h2>
-        <p>{{doubleCount}}</p>
-        <button @click="inc">inc</button>
-
-        <table>
+        <table class="board-wrapper">
             <thead>
                 <tr>
                     <th>번호</th>
                     <th>제목</th>
                     <th>작성자</th>
                     <th>작성일</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -23,25 +21,14 @@
                 </tr>
             </tbody>
         </table>
-
-        <h2>게시판  {{selectIdx}} 수정</h2>
-
-        <div>
-            <label>제목 : </label>
-            <input type="text" v-model="selectInfo.title"/>
-            <button>수정</button>
+        <div class="board-button-wrapper">
+            <button>
+                <router-link :to="{path:'/board/edit', params: {name: 'dog', age:4}}">
+                    게시글 추가
+                </router-link>
+            </button>
+            <button>게시글 수정</button>
         </div>
-        <div>
-            <label>작성자 : </label>
-            <input type="text" v-model="selectInfo.writer"/>
-            <button>수정</button>
-        </div>
-        <div>
-            <label>작성일 : </label>
-            <input type="text" v-model="selectInfo.wdate"/>
-            <button>수정</button>
-        </div>
-
     </div>
 </template>
 
@@ -55,33 +42,14 @@ export default {
     setup(){
         const store = useStore();
 
-        const boardList = computed(()=> store.state.moduleA.list).value;
-        const doubleCount = computed(()=>store.getters["moduleA/doubleCount"]);
-        const inc = () => store.commit("moduleA/increment");
+        const boardList = computed(()=> store.state.VuexBoardList.list).value;
+        // const doubleCount = computed(()=>store.getters["moduleA/doubleCount"]);
+        // const inc = () => store.commit("moduleA/increment");
 
-        const selectIdx = ref(1); 
-
-        
-        const selectInfo = reactive({
-            title : boardList[selectIdx.value-1].title,
-            writer : boardList[selectIdx.value-1].writer,
-            wdate : boardList[selectIdx.value-1].wdate,
-        })
-
-
-        const selectChange = (idx) => {
-            selectInfo.title = boardList[idx-1].title;
-            selectInfo.writer = boardList[idx-1].writer;
-            selectInfo.wdate = boardList[idx-1].wdate;
-        }
-
+        const selectIdx = ref(1);
         return {
             boardList,
-            inc,
-            doubleCount,
             selectIdx,
-            selectInfo,
-            selectChange,
         }
     },
     
@@ -89,5 +57,18 @@ export default {
 </script>
 
 <style scoped>
-
+.board-wrapper{
+    margin:0 auto;
+}
+.board-wrapper thead tr{
+    border-bottom:1px solid red;
+}
+.board-button-wrapper{
+    margin:0 auto;
+    margin-top:2rem;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    gap:1rem;
+}
 </style>
